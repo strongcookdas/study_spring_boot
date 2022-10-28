@@ -2,9 +2,8 @@ package com.springboot.userdao.controller;
 
 import com.springboot.userdao.dao.UserDao;
 import com.springboot.userdao.domain.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 
@@ -23,8 +22,15 @@ public class UserController {
         return "Hello World";
     }
 
-    @GetMapping("/user")
-    public void add() throws SQLException{
-        userDao.add(new User("1","Kyeongrok", "1234"));
+    @PostMapping("/user")
+    public void add(@RequestBody User user) throws SQLException{
+        userDao.add(new User(user.getId(), user.getName(), user.getPassword()));
+    }
+
+    @DeleteMapping("/user")
+    public ResponseEntity<Integer> deleteAll() throws SQLException{
+        return ResponseEntity
+                .ok()
+                .body(userDao.deleteAll());
     }
 }
